@@ -1,0 +1,88 @@
+/* ###### 3.2 Datepicker ###### */
+
+.ui-datepicker {
+	background-color: $white !important;
+	border: 1px solid rgba(28, 39, 60, 0.2) !important; 
+	font-family: inherit !important;
+	font-size: inherit !important;
+	padding: 10px !important;
+	margin: 1px 0 0 !important;
+	display: none !important;
+	width: auto !important;
+	z-index: 5 !important;
+	.ui-datepicker-header {
+		display: flex !important;
+		justify-content: space-between !important;
+		align-items: center !important;
+		position: relative !important;
+		font-weight: 500 !important;
+		font-size: 12px !important;
+		text-transform: uppercase !important;
+		color: $default-color !important;
+		padding: 0 0 5px !important;
+		letter-spacing: 1px !important;
+		border: 0 !important;
+		background-color: transparent !important;
+		border-top-left-radius: 3px !important;
+		border-top-right-radius: 3px !important;
+		.ui-datepicker-next, .ui-datepicker-prev {
+			text-indent: -99999px !important;
+			color: $gray-600 !important;
+			top: 3px !important;
+		}
+		.ui-datepicker-next::before, .ui-datepicker-prev::before {
+			font-size: 16px !important;
+			font-family: 'Ionicons' !important;
+			position: absolute !important;
+			top: -2px !important;
+			text-indent: 0 !important;
+		}
+		.ui-datepicker-next {
+			&:hover::before, &:focus::before {
+				color: $gray-800 !important;
+			}
+		}
+		.ui-datepicker-prev {
+			&:hover::before, &:focus::before {
+				color: $gray-800 !important;
+			}
+		}
+		.ui-datepicker-next {
+			order: 3 !important;
+			&:before {
+				right: 15px !important;
+				content: '\f3d1' !important;
+			}
+		}
+		.ui-datepicker-prev:before {
+			left: 15px !important;
+			content: '\f3cf' !important;
+		}
+		.ui-datepicker-next-hover, .ui-datepicker-prev-hover {
+			color: $gray-700 !important;
+			cursor: pointer !important;
+			top: 1px !important;
+			border: 0 !important;
+			background-color: transparent !important;
+		}
+	}
+	.ui-datepicker-title {
+		color: $gray-800!important;
+		font-weight: 700!important;
+		font-size: 13px!important;
+	}
+	.ui-datepicker-calendar {
+		margin: 0!important;
+		background-color: transparent!important;
+		border-bottom-right-radius: 3px!important;
+		border-bottom-left-radius: 3px!important;
+		th {
+			text-transform: uppercase !important;
+			font-size: 12px !important;
+			font-weight: 700 !important;
+			letter-spacing: 1px !important;
+			padding: 6px 9px !important;
+			color: $gray-800 !important;
+		}
+	}
+}
