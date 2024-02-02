@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $pagination  = 10;
+        $pagination  = 3;
         $users    = User::when($request->keyword, function ($query) use ($request) {
             $query->where('name', 'like', "%{$request->keyword}%");
         })->orderBy('created_at', 'desc')->paginate($pagination);

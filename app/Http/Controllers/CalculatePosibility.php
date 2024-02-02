@@ -6,6 +6,7 @@ use App\Models\AktifitasModel;
 use App\Models\User;
 use App\Models\Branchlist;
 use App\Models\Datasubmitted;
+use App\Models\DPT;
 use App\Models\Filefoto;
 use App\Models\Quickcount;
 use App\Models\Role;
@@ -13,7 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class QuickCountController extends Controller
+class CalculatePosibility extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,19 +31,17 @@ class QuickCountController extends Controller
     public function index(Request $request)
     {
         $pagination  = 10;
-        $users    = Quickcount::when($request->keyword, function ($query) use ($request) {
-            $query->where('desa', 'like', "%{$request->keyword}%");
-        })->orderBy('created_at', 'desc')->paginate($pagination);
+        $users    = DPT::when($request->keyword, function ($query) use ($request) {
+            $query->where('nama', 'like', "%{$request->keyword}%");
+        })->orderBy('id', 'asc')->paginate($pagination);
 
         $users->appends($request->only('keyword'));
 
-        return view('quick.index', [
+        return view('calculate.create', [
             'nik'    => 'NIK',
             'users' => $users,
         ])->with('i', ($request->input('page', 1) - 1) * $pagination);
     }
-
-
 
     public function branchSearch(Request $request)
     {
@@ -168,7 +167,6 @@ class QuickCountController extends Controller
         $desa = $request->input('desa');
         $nama_saksi = $request->input('nama_saksi');
         $suara_masuk = $request->input('suara_masuk');
-        $suara_pkb = $request->input(('suara_pkb'));
         $suara_ibas = $request->input('suara_ibas');
         $suara_sah = $request->input('suara_sah');
         $suara_tidak_sah = $request->input('suara_tidak_sah');
@@ -220,7 +218,6 @@ class QuickCountController extends Controller
             'notps' => 'required',
             'nama_saksi' => 'required',
             'suara_masuk' => 'required',
-            'suara_pkb' => 'required',
             'suara_ibas' => 'required',
             'suara_sah' => 'required',
             'suara_tidak_sah' => 'required',
@@ -254,7 +251,6 @@ class QuickCountController extends Controller
                 'desa' => $desa,
                 'nama_saksi' => $saksi_name,
                 'suara_masuk' => $suara_masuk,
-                'suara_pkb' => $suara_pkb,
                 'suara_ibas' => $suara_ibas,
                 'suara_sah' => $suara_sah,
                 'suara_tidak_sah' => $suara_tidak_sah,
@@ -475,7 +471,6 @@ class QuickCountController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-
         } else if ($namec1 != '' && $namec1_1 != '' && $namec1_2 != '' && $namec1_3 == '') {
 
             $namec1org = $namec1->getClientOriginalName();
@@ -545,7 +540,6 @@ class QuickCountController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-
         } else if ($namec1 != '' && $namec1_1 == '' && $namec1_2 == '' && $namec1_3 == '') {
 
             $namec1org = $namec1->getClientOriginalName();

@@ -28,7 +28,7 @@ class IbasController extends Controller
 
     public function index(Request $request)
     {
-        $pagination  = 10;
+        $pagination  = 20;
         $users    = Datasubmitted::when($request->keyword, function ($query) use ($request) {
             $query->where('nama', 'like', "%{$request->keyword}%");
         })->orderBy('created_at', 'desc')->paginate($pagination);
@@ -197,8 +197,8 @@ class IbasController extends Controller
             'created_by' => 'required',
             'ket' => 'required',
             'tps' => 'required',
-            'foto_ktp' => 'required|image|mimes:jpeg,jpg|max:2048',
-            'foto_diri' => 'required|image|mimes:jpeg,jpg|max:2048',
+            'foto_ktp' => 'required|image|mimes:jpeg,jpg|max:8192',
+            'foto_diri' => 'required|image|mimes:jpeg,jpg|max:8192',
         ]);
 
         $user_bank = DB::table('datasubmitted')
@@ -212,8 +212,6 @@ class IbasController extends Controller
             // User::create($request->all());
 
             $ext = array('jpg', 'jpeg', 'JPG', 'JPEG');
-            // dd($ext);
-
 
             $inarktp = in_array($extktp, $ext);
             $inarfoto = in_array($extfoto, $ext);
@@ -272,7 +270,7 @@ class IbasController extends Controller
     public function show($id = 0)
     {
         // dd($id);
-        $datas = Datasubmitted::get();
+        $datas = Datasubmitted::where('id', $id)->get();
 
         foreach ($datas as $dat) {
             $idarea = $dat->idarea;
@@ -301,14 +299,32 @@ class IbasController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(Datasubmitted $user)
+    public function edit($id = 0)
     {
 
+        // dd($id);
 
+        $datas = Datasubmitted::where('id', $id)->get();
 
-        //dd($branchall);
-        //return view('users.create',compact('branchlist'));
-        return view('ibas.edit', compact('user'));
+        foreach ($datas as $dat) {
+            $idarea = $dat->idarea;
+        }
+
+        // dd($idarea);
+
+        $desa = DB::table('area')
+            ->select('namaarea')
+            ->where('id', $idarea)
+            ->pluck('namaarea')
+            ->last();
+
+        return view(
+            'ibas.edit',
+            [
+                'datas' => $datas,
+                'desa' => $desa
+            ]
+        );
     }
 
     /**
@@ -318,43 +334,180 @@ class IbasController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id = 0)
     {
+        // dd($id);
         $username = $request->email;
         $password = $request->password;
         $ip_address = $request->ip_address;
         $url = $request->fullUrl();
 
         $nik = session('nik');
+        $namaap = session('name');
+        $nikuser = $request->input('nik');
+        $namauser = $request->input('name');
+        $jk = $request->input('jk');
+        $usia = $request->input('usia');
+        $idarea = $request->input('idarea');
+        $rt = $request->input('rt');
+        $rw = $request->input('rw');
+        $tps = $request->input('tps');
+        $ket = $request->input('ket');
+        $updated_by = $request->input('updated_by');
+
+        $tgl = Carbon::now();
+        $formatYear = $tgl->format('Y');
+        $formatMonth = $tgl->format('m');
+        $formatDay = $tgl->format('d');
+        $simpatisan = "simpatisan";
+        $folder = $formatYear . "/" . $simpatisan . "/" . $nikuser;
+
         $request->validate([
-            'role' => 'required',
-            'email' => 'required',
-            'name' => 'required',
-            'branch_code' => 'required',
             'nik' => 'required',
-            'namacab' => 'required',
-            'kodecab' => 'required',
-            'status' => 'required'
+            'jk' => 'required',
+            'name' => 'required',
+            'idarea' => 'required',
+            'usia' => 'required',
+            'rt' => 'required',
+            'rw' => 'required',
+            'updated_by' => 'required',
+            'ket' => 'required',
+            'tps' => 'required',
+            'foto_ktp' => 'image|mimes:jpeg,jpg|max:8192',
+            'foto_diri' => 'image|mimes:jpeg,jpg|max:8192',
         ]);
 
-        $user->update($request->all());
+        $namektp = $request->file('foto_ktp');
+        if ($namektp != '') {
+            $orgktp = $namektp->getClientOriginalName();
+            $namektpstore = $nikuser . "_KTP_" . $orgktp;
+            $extktp = $request->file('foto_ktp')->getClientOriginalExtension();
+        }
+
+        $namefoto = $request->file('foto_diri');
+        if ($namefoto != '') {
+            $orgfoto = $namefoto->getClientOriginalName();
+            $extfoto = $request->file('foto_diri')->getClientOriginalExtension();
+            $namefotostore = $nikuser . "_FOTO_" . $orgfoto;
+        }
+
+        if ($namektp != '' && $namefoto != '') {
+
+            $namektp = $request->file('foto_ktp')->getClientOriginalName();
+            $namektpstore = $nikuser . "_KTP_" . $namektp;
+            $extktp = $request->file('foto_ktp')->getClientOriginalExtension();
+
+            $namefoto = $request->file('foto_diri')->getClientOriginalName();
+            $extfoto = $request->file('foto_diri')->getClientOriginalExtension();
+            $namefotostore = $nikuser . "_FOTO_" . $namefoto;
+
+            $pathktp = $request->file('foto_ktp')->storeAs($folder, $namektpstore);
+            $pathfoto = $request->file('foto_diri')->storeAs($folder, $namefotostore);
+
+            Datasubmitted::where('id', $id)
+                ->update([
+                    'nik' => $nikuser,
+                    'idarea' => $idarea,
+                    'nama' => $namauser,
+                    'jk' => $jk,
+                    'usia' => $usia,
+                    'rt' => $rt,
+                    'rw' => $rw,
+                    'tps' => $tps,
+                    'path' => $folder,
+                    'foto_ktp' => $namektpstore,
+                    'foto_diri' => $namefotostore,
+                    'ket' => $ket,
+                    'updated_by' => $updated_by,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+        } else if ($namefoto == '' && $namektp != '') {
+
+            $namektp = $request->file('foto_ktp')->getClientOriginalName();
+            $namektpstore = $nikuser . "_KTP_" . $namektp;
+            $extktp = $request->file('foto_ktp')->getClientOriginalExtension();
+
+            $pathktp = $request->file('foto_ktp')->storeAs($folder, $namektpstore);
+            // $pathfoto = $request->file('foto_diri')->storeAs($folder, $namefotostore);
+
+            Datasubmitted::where('id', $id)
+                ->update([
+                    'nik' => $nikuser,
+                    'idarea' => $idarea,
+                    'nama' => $namauser,
+                    'jk' => $jk,
+                    'usia' => $usia,
+                    'rt' => $rt,
+                    'rw' => $rw,
+                    'tps' => $tps,
+                    'path' => $folder,
+                    'foto_ktp' => $namektpstore,
+                    'ket' => $ket,
+                    'updated_by' => $updated_by,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+        } else if ($namefoto != '' && $namektp == '') {
+
+            $namefoto = $request->file('foto_diri')->getClientOriginalName();
+            $extfoto = $request->file('foto_diri')->getClientOriginalExtension();
+            $namefotostore = $nikuser . "_FOTO_" . $namefoto;
+
+            // $pathktp = $request->file('foto_ktp')->storeAs($folder, $namektpstore);
+            $pathfoto = $request->file('foto_diri')->storeAs($folder, $namefotostore);
+
+            Datasubmitted::where('id', $id)
+                ->update([
+                    'nik' => $nikuser,
+                    'idarea' => $idarea,
+                    'nama' => $namauser,
+                    'jk' => $jk,
+                    'usia' => $usia,
+                    'rt' => $rt,
+                    'rw' => $rw,
+                    'tps' => $tps,
+                    'path' => $folder,
+                    'foto_diri' => $namefotostore,
+                    'ket' => $ket,
+                    'updated_by' => $updated_by,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+        } else if ($namefoto == '' && $namektp == '') {
+            Datasubmitted::where('id', $id)
+                ->update([
+                    'nik' => $nikuser,
+                    'idarea' => $idarea,
+                    'nama' => $namauser,
+                    'jk' => $jk,
+                    'usia' => $usia,
+                    'rt' => $rt,
+                    'rw' => $rw,
+                    'tps' => $tps,
+                    'path' => $folder,
+                    'ket' => $ket,
+                    'updated_by' => $updated_by,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+        }
 
         AktifitasModel::insert([
             'nik' => $nik,
             'email' => $nik,
             'ip_address' => $ip_address,
-            'nama' => $nik,
+            'nama' => $namaap,
             'url' => $url,
-            'action' => 'Update User ' . $username,
+            'action' => 'Update Pemilih Kang Ibas -> ' . $namauser,
             'status' => 'Success',
             'caused_by' => '',
             'created_at' => now(),
             'updated_at' => now(),
-
         ]);
 
-        return redirect()->route('users.index')
-            ->with('success', 'User updated successfully');
+        return redirect()->route('ibas.index')
+            ->with('success', 'Pemilih Kang Ibas updated successfully.');
     }
 
     /**
@@ -367,7 +520,7 @@ class IbasController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('users.index')
+        return redirect()->route('ibas.index')
             ->with('success', 'User deleted successfully');
     }
 }

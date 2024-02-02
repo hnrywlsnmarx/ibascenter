@@ -70,6 +70,7 @@
                     <th>Saksi</th>
                     <th>Total Suara</th>
                     <th>Suara Sah</th>
+                    <th>Suara PKB</th>
                     <th>Perolehan Suara Kang Ibas</th>
                     <th>Suara Tidak Sah</th>
                     <th>Suara Abstain</th>
@@ -84,6 +85,7 @@
                     <td>{{ $user->nama_saksi }}</td>
                     <td>{{ $user->suara_masuk }}</td>
                     <td>{{ $user->suara_sah }}</td>
+                    <td>{{ $user->suara_pkb }}</td>
                     <td>{{ $user->suara_ibas }}</td>
                     <td>{{ $user->suara_tidak_sah }}</td>
                     <td>{{ $user->suara_abstain }}</td>
@@ -93,7 +95,7 @@
         
                             <a class="btn btn-sm btn-info" href="{{ route('quick.show',$user->id) }}">Show</a>
             
-                            {{-- <a class="btn btn-sm btn-primary" href="{{ route('quick.edit', $user->id) }}">Edit</a> --}}
+                            <a class="btn btn-sm btn-primary" href="{{ route('quick.edit', $user->id) }}">Edit</a>
         
                             {{-- @csrf
                             @method('DELETE')

@@ -5,7 +5,7 @@
             @font-face {
                 font-family: 'fontes';
                 /* src: url('http://172.28.97.167:600/fonts/Ubuntu-Regular.ttf') format("truetype"); */
-				src: url('http://10.87.121.148:777/fonts/Quicksand-Medium.ttf') format("truetype");
+				src: url('http://localhost:777/fonts/Quicksand-Medium.ttf') format("truetype");
                 font-weight: normal;
                 font-style: normal;
                 font-variant: normal;

@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class QuickCountController extends Controller
+class DataBalancingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,16 +29,58 @@ class QuickCountController extends Controller
 
     public function index(Request $request)
     {
-        $pagination  = 10;
-        $users    = Quickcount::when($request->keyword, function ($query) use ($request) {
-            $query->where('desa', 'like', "%{$request->keyword}%");
-        })->orderBy('created_at', 'desc')->paginate($pagination);
+        $pagination  = 1000;
+        // $users    = DataSubmitted::join('sourcekpu as s', function ($join) {
+        //     $join->on('datasubmitted.nama', '=', 's.nama')
+        //         // ->on('datasubmitted.usia', '=', 's.usia')
+        //         // ->on('datasubmitted.tps', '=', 's.tps');
+        //         ->whereRaw('datasubmitted.rt = SUBSTR(s.rt, 2, 3)')
+        //         ->whereRaw('datasubmitted.rw = SUBSTR(s.rw, 2, 3)');
+        // })
+        //     ->where('datasubmitted.idarea', '=', 1)
+        //     ->where('s.desa', '=', 'KALIJAGA')
+        //     ->select('datasubmitted.nik', 'datasubmitted.nama', 'datasubmitted.jk', 'datasubmitted.usia', 'datasubmitted.rt', 'datasubmitted.rw', 'datasubmitted.tps', 's.nama as source_nama', 's.jk as source_jk', 's.usia as source_usia', 's.desa as source_desa', 's.rt as source_rt', 's.rw as source_rw', 's.tps as source_tps', 'datasubmitted.created_by')
+        //     ->paginate($pagination);
+
+        // $users  =   Datasubmitted::when($request->keyword, function ($query) use ($request) {
+        //     $query->where('nama', 'like', "%{$request->keyword}%");
+        // })->orderBy('created_at', 'desc')->paginate($pagination);
+
+        $users = DataSubmitted::join('sourcekpu as s', function ($join) {
+            $join->on('datasubmitted.nama', '=', 's.nama')
+                ->whereRaw('datasubmitted.rt = SUBSTR(s.rt, 2, 3)')
+                ->whereRaw('datasubmitted.rw = SUBSTR(s.rw, 2, 3)');
+        })
+            ->where('datasubmitted.idarea', '=', 1)
+            ->where('s.desa', '=', 'KALIJAGA')
+            ->when($request->keyword, function ($query) use ($request) {
+                $query->where('datasubmitted.nama', 'like', "%{$request->keyword}%");
+            })
+            ->select('datasubmitted.nik', 'datasubmitted.nama', 'datasubmitted.jk', 'datasubmitted.usia', 'datasubmitted.rt', 'datasubmitted.rw', 'datasubmitted.tps', 's.nama as source_nama', 's.jk as source_jk', 's.usia as source_usia', 's.desa as source_desa', 's.rt as source_rt', 's.rw as source_rw', 's.tps as source_tps', 'datasubmitted.created_by')
+            ->orderBy('datasubmitted.created_at', 'desc')
+            ->paginate($pagination);
 
         $users->appends($request->only('keyword'));
 
-        return view('quick.index', [
+        $totalRowsBalance = DB::table('datasubmitted')
+            ->join('sourcekpu as s', function ($join) {
+                $join->on('datasubmitted.nama', '=', 's.nama')
+                    ->whereRaw('datasubmitted.rt = SUBSTR(s.rt, 2, 3)')
+                    ->whereRaw('datasubmitted.rw = SUBSTR(s.rw, 2, 3)');
+            })
+            ->where('datasubmitted.idarea', 1)
+            ->where('s.desa', 'KALIJAGA')
+            ->count();
+
+        $totalRows = DB::table('datasubmitted')
+            ->where('datasubmitted.idarea', 1)
+            ->count();
+
+        return view('balancing.index', [
             'nik'    => 'NIK',
             'users' => $users,
+            'totalRowsBalance' => $totalRowsBalance,
+            'totalRows' => $totalRows
         ])->with('i', ($request->input('page', 1) - 1) * $pagination);
     }
 
@@ -168,7 +210,6 @@ class QuickCountController extends Controller
         $desa = $request->input('desa');
         $nama_saksi = $request->input('nama_saksi');
         $suara_masuk = $request->input('suara_masuk');
-        $suara_pkb = $request->input(('suara_pkb'));
         $suara_ibas = $request->input('suara_ibas');
         $suara_sah = $request->input('suara_sah');
         $suara_tidak_sah = $request->input('suara_tidak_sah');
@@ -220,7 +261,6 @@ class QuickCountController extends Controller
             'notps' => 'required',
             'nama_saksi' => 'required',
             'suara_masuk' => 'required',
-            'suara_pkb' => 'required',
             'suara_ibas' => 'required',
             'suara_sah' => 'required',
             'suara_tidak_sah' => 'required',
@@ -254,7 +294,6 @@ class QuickCountController extends Controller
                 'desa' => $desa,
                 'nama_saksi' => $saksi_name,
                 'suara_masuk' => $suara_masuk,
-                'suara_pkb' => $suara_pkb,
                 'suara_ibas' => $suara_ibas,
                 'suara_sah' => $suara_sah,
                 'suara_tidak_sah' => $suara_tidak_sah,
@@ -475,7 +514,6 @@ class QuickCountController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-
         } else if ($namec1 != '' && $namec1_1 != '' && $namec1_2 != '' && $namec1_3 == '') {
 
             $namec1org = $namec1->getClientOriginalName();
@@ -545,7 +583,6 @@ class QuickCountController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-
         } else if ($namec1 != '' && $namec1_1 == '' && $namec1_2 == '' && $namec1_3 == '') {
 
             $namec1org = $namec1->getClientOriginalName();

@@ -5,15 +5,15 @@
 
 @section('breadcrumb')
 
-					<div class="left-content">
-						<h4 class="content-title mb-1">Users</h4>
-						<nav aria-label="breadcrumb">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="#">Master User</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Index</li>
-							</ol>
-						</nav>
-					</div>
+<div class="left-content">
+    <h4 class="content-title mb-1">Pemilih Kang Ibas</h4>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master Pemilih Kang Ibas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Show</li>
+        </ol>
+    </nav>
+</div>
 
 @endsection('breadcrumb')
 
@@ -21,10 +21,10 @@
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2>Edit User</h2>
+                <h2>Edit Pemilih Kang Ibas</h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('users.index') }}"> Back</a>
+                <a class="btn btn-primary" href="{{ route('ibas.index') }}"> Back</a>
             </div>
         </div>
     </div>
@@ -39,18 +39,19 @@
             </ul>
         </div>
     @endif
-  
-    <form action="{{ route('users.update',$user->nik) }}" method="POST">
+
+    @foreach($datas as $data)
+    <form action="{{ route('ibas.update',$data->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-
+        
         <div class="row">
             <input type="hidden" name="ip_address" value="{{ session('ip_address') }}">
             <div class="col-lg-12 col-md-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="main-content-label mg-b-5">
-                            Edit User
+                            Create
                         </div>
                         {{-- <p class="mg-b-20 text-muted">It is Very Easy to Customize and it uses in your website apllication.</p> --}}
                         <div class="pd-30 pd-sm-40 bg-gray-100">
@@ -59,58 +60,129 @@
                                     <label class="form-label mg-b-0">NIK</label>
                                 </div>
                                 <div class="col-md-12 mg-t-5">
-                                    <input type="text" name="nik" value="{{ $user->nik }}" class="form-control" placeholder="NIK" readonly>
+                                    <input type="text" name="nik" id="nik" class="form-control" pattern="\d*" placeholder="NIK" maxlength="16" value="{{ $data->nik }}" required>
                                 </div>
                             </div>
                             <div class="row row-xs align-items-center mg-b-20">
                                 <div class="col-md-12">
-                                    <label class="form-label mg-b-0">Name</label>
+                                    <label class="form-label mg-b-0">Nama</label>
                                 </div>
                                 <div class="col-md-12 mg-t-5">
-                                    <input type="text" name="name" value="{{ $user->name }}" class="form-control" placeholder="Name" readonly>
+                                    <input type="text" name="name" id="name" class="form-control" placeholder="Name" value="{{ $data->nama }}" required>
                                 </div>
                             </div>
                             <div class="row row-xs align-items-center mg-b-20">
                                 <div class="col-md-12">
-                                    <label class="form-label mg-b-0">Email</label>
+                                    <label class="form-label mg-b-0">Jenis Kelamin</label>
                                 </div>
                                 <div class="col-md-12 mg-t-5">
-                                    <input type="email" name="email" value="{{ $user->email }}" class="form-control" placeholder="Email" readonly>
-                                </div>
-                            </div>
-                           
-                            
-                            <div class="row row-xs align-items-center mg-b-20">
-                                <div class="col-md-12">
-                                    <label class="form-label mg-b-0">Role</label>
-                                </div>
-                                <div class="col-md-12 mg-t-5">
-                                    {{-- <input type="text" name="role" value="{{ $user->role }}" class="form-control" placeholder="Role"> --}}
-                                    <select class="livesearch-role form-control p-3" name="role">
-                                        @foreach($rolelist as $role)
-                                            @if(in_array($user->role, $roleall))
-                                            <option value="{{ $role->id }}" selected="true">{{ $role->name }}</option>
-                                            @else
-                                            <option value="{{ $role->id }}">{{ $role->id }}</option>
-                                            @endif 
-                                        @endforeach
+                                    <select class="form-control" name="jk" id="jk" required>
+                                        @if($data->jk == "L")
+                                            <option value="">-Pilih Jenis Kelamin-</option>
+                                            <option value="L" selected>Laki - laki</option>
+                                            <option value="P">Perempuan</option>
+                                        @elseif($data->jk == "P")
+                                            <option value="">-Pilih Jenis Kelamin-</option>
+                                            <option value="L">Laki - laki</option>
+                                            <option value="P" selected>Perempuan</option>
+                                        @else
+                                            <option value="" selected>-Pilih Jenis Kelamin-</option>
+                                            <option value="L">Laki - laki</option>
+                                            <option value="P">Perempuan</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>
                             <div class="row row-xs align-items-center mg-b-20">
                                 <div class="col-md-12">
-                                    <label class="form-label mg-b-0">Status</label>
+                                    <label class="form-label mg-b-0">Usia</label>
                                 </div>
                                 <div class="col-md-12 mg-t-5">
-                                    <select class="form-control" name="status" id="status">
-                                        @foreach($statuslist as $status)
-                                            @if(in_array($user->status, $statusall))
-                                            <option value="{{ $status->id }}" selected="true">{{ $status->nama }}</option>
-                                            @else
-                                            <option value="{{ $status->id }}">{{ $status->id }}</option>
-                                            @endif 
-                                        @endforeach
+                                    <input class="form-control" name="usia" placeholder="Enter your age" value="{{ $data->usia }}" type="number" required>
+                                </div>
+                            </div>
+                            <div class="row row-xs align-items-center mg-b-20">
+                                <div class="col-md-12">
+                                    <label class="form-label mg-b-0">Desa</label>
+                                </div>
+                                <div class="col-md-12 mg-t-5">
+                                    <select class="form-control" name="idarea" id="idarea" required>
+                                        @if($data->idarea == "1")
+                                        <option value="">-Pilih Desa-</option>
+                                        <option value="1" selected>KALIJAGA</option>
+                                        <option value="2">ARGASUNYA</option>
+                                        @elseif($data->idarea == "2")
+                                        <option value="">-Pilih Desa-</option>
+                                        <option value="1">KALIJAGA</option>
+                                        <option value="2" selected>ARGASUNYA</option>
+                                        @else
+                                        <option value="" selected>-Pilih Desa-</option>
+                                        <option value="1">KALIJAGA</option>
+                                        <option value="2">ARGASUNYA</option>
+                                        @endif
                                     </select>
+                                </div>
+                            </div>
+                            <div class="row row-xs align-items-center mg-b-20">
+                                <div class="col-md-12">
+                                    <label class="form-label mg-b-0">RT</label>
+                                </div>
+                                <div class="col-md-12 mg-t-5">
+                                    <input class="form-control" name="rt" type="number" value="{{ $data->rt }}" required>
+                                </div>
+                            </div>
+                            <div class="row row-xs align-items-center mg-b-20">
+                                <div class="col-md-12">
+                                    <label class="form-label mg-b-0">RW</label>
+                                </div>
+                                <div class="col-md-12 mg-t-5">
+                                    <input class="form-control" name="rw" type="number" required value="{{ $data->rw }}">
+                                </div>
+                            </div>                    
+                            <div class="row row-xs align-items-center mg-b-20">
+                                <div class="col-md-12">
+                                    <label class="form-label mg-b-0">TPS</label>
+                                </div>
+                                <div class="col-md-12 mg-t-5">
+                                    <input class="form-control" name="tps" type="number" required value="{{ $data->tps }}">
+                                </div>
+                            </div>
+                            <div class="row row-xs align-items-center mg-b-20">
+                                <div class="col-md-12">
+                                    <label class="form-label mg-b-0">Keterangan</label>
+                                </div>
+                                <div class="col-md-12 mg-t-5"> 
+                                    <input class="form-control" name="ket" type="text" value="{{ $data->ket }}" required>
+                                </div>
+                            </div>
+                            <div class="row row-xs align-items-center mg-b-20">
+                                <div class="col-md-12">
+                                    <label class="form-label mg-b-0">Foto KTP</label>
+                                </div>
+                                <div class="col-md-12 mg-t-5">
+                                    <input class="form-control" name="foto_ktp" type="file">
+                                </div>
+                                <div class="col-md-8 mg-t-5 mg-md-t-0">
+                                    <center><img height="400" id="imgktp" src="{{ asset('/public/storage/'.$data->path."/".$data->foto_ktp) }}" alt="{{ asset('public/storage/'.$data->path."/".$data->foto_ktp) }}"></center>
+                                </div>
+                            </div>
+                            <div class="row row-xs align-items-center mg-b-20">
+                                <div class="col-md-12">
+                                    <label class="form-label mg-b-0">Foto Diri</label>
+                                </div>
+                                <div class="col-md-12 mg-t-5">
+                                    <input class="form-control" name="foto_diri" type="file">
+                                </div>
+                                <div class="col-md-8 mg-t-5 mg-md-t-0">
+                                    <center><img height="400" id="imgktp" src="{{ asset('/public/storage/'.$data->path."/".$data->foto_diri) }}" alt="{{ asset('public/storage/'.$data->path."/".$data->foto_diri) }}"></center>
+                                </div>
+                            </div>
+                            <div class="row row-xs align-items-center mg-b-20">
+                                <div class="col-md-12">
+                                    <label class="form-label mg-b-0">Updated By</label>
+                                </div>
+                                <div class="col-md-12 mg-t-5">
+                                    <input class="form-control" name="updated_by" type="text" value="{{ session('name') }}" readonly required>
                                 </div>
                             </div>
      
@@ -121,11 +193,8 @@
                 </div>
             </div>
         </div>
-        <!-- /row -->
-
-        
-   
     </form>
+    @endforeach
 @endsection
 
 @section('scripts')

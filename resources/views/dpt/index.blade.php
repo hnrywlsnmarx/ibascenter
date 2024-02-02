@@ -12,10 +12,10 @@
 @section('breadcrumb')
 
 <div class="left-content">
-    <h4 class="content-title mb-1">Pemilih Kang Ibas</h4>
+    <h4 class="content-title mb-1">DPT KPU</h4>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Master Pemilih Kang Ibas</a></li>
+            <li class="breadcrumb-item"><a href="#">DPT KPU</a></li>
             <li class="breadcrumb-item active" aria-current="page">Index</li>
         </ol>
     </nav>
@@ -23,18 +23,7 @@
 
 @endsection('breadcrumb')
 
-@section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h5>Master Pemilih Kang Ibas</h5>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-sm btn-success" href="{{ route('ibas.create') }}"> Create Pemilih Kang Ibas</a>
-            </div>
-        </div>
-    </div>
-    <br>
+@section('content')    
     <form action="{{ url()->current() }}"
         method="get">
     <div class="col-lg-12 col-md-12">
@@ -65,44 +54,25 @@
             <table class="table table-bordered table-hover  mb-0 text-md-nowrap border" style="font-size: smaller;">
                 <tr style="background-color: rgb(204, 227, 253)">
                     <th>No</th>
-                    <th>NIK</th>
                     <th>Nama</th>
                     <th>Gender</th>
                     <th>Usia</th>
+                    <th>Desa</th>
                     <th>RT</th>
                     <th>RW</th>
-                    <th>TPS</th>
-                    <th>Ket</th>
-                    <th>Created By</th>
-                    <th>Created At</th>
-                    <th width="150px">Action</th>
+                    <th>TPS</th>                    
+                    
                 </tr>
                 @foreach ($users as $user)
                 <tr>
-                    <td>{{ ++$i }}</td>
-                    <td>{{ $user->nik }}</td>
+                    <td>{{ ++$i }}</td>                    
                     <td>{{ $user->nama }}</td>
                     <td>{{ $user->jk }}</td>
                     <td>{{ $user->usia }}</td>
+                    <td>{{ $user->desa }}</td>
                     <td>{{ $user->rt }}</td>
                     <td>{{ $user->rw }}</td>
                     <td>{{ $user->tps }}</td>
-                    <td>{{ $user->ket }}</td>
-                    <td>{{ $user->created_by }}</td>
-                    <td>{{ $user->created_at }}</td>
-                    <td>
-                        <form action="{{ route('ibas.destroy',$user->nik ) }}" method="POST">
-        
-                            <a class="btn btn-sm btn-info" href="{{ route('ibas.show',$user->id) }}">Show</a>
-            
-                            <a class="btn btn-sm btn-primary" href="{{ route('ibas.edit', $user->id) }}">Edit</a>
-        
-                            {{-- @csrf
-                            @method('DELETE')
-                            
-                            <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger">Delete</button> --}}
-                        </form>
-                    </td>
                 </tr>
                 @endforeach
             </table>

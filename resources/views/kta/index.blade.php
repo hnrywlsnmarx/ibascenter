@@ -133,7 +133,48 @@
             </div>
         </div>
     </div>
-    
+    <div class="row row-sm">				
+        <div class="col-lg-12">				
+            <div class="row row-sm">				
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                           <center><h4 class="card-title mb-4">Analytical Section</h4></center><hr>
+                            <div class="d-flex justify-content-between" style="text-align: center !important;">
+                                <div class="card-options ml-auto">
+                                </div>
+                            </div>
+                            <div class="form-check mb-3">
+                                <div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <a href="{{ url('balancing-kalijaga') }}" class="btn btn-sm btn-success" style="white-space: nowrap;">
+                                                Data Balancing Kalijaga
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <a href="{{ url('balancing-argasunya') }}" class="btn btn-sm btn-secondary">
+                                                Data Balancing Argasunya
+                                            </a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <a href="{{ url('calculate') }}" class="btn btn-sm btn-primary">
+                                                Hitung Jatah Kursi
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    {{-- <a href="#" class="btn btn-sm btn-secondary">
+                                        Buat Real Count 
+                                    </a> --}}
+                                </div>
+                            </div>
+                            {{-- <br><br><br> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row row-sm">				
         <div class="col-lg-12">				
             <div class="row row-sm">				
@@ -149,7 +190,7 @@
                             <div class="d-flex mb-0">
                                 {{-- style="margin: auto; width: 40%;" --}}
                                 <div>
-                                    <a href="{{ route('ibas.create') }}" class="btn btn-sm btn-success" style="color: rgb(255, 255, 255); font-weight: bold;">
+                                    <a href="{{ route('ibas.create') }}" class="btn btn-sm btn-success">
                                         Buat Data Pemilih Kang Ibas
                                     </a>
                                     <a href="{{ route('quick.create') }}" class="btn btn-sm btn-secondary">

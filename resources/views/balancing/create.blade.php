@@ -97,14 +97,6 @@
                         </div>
                         <div class="row row-xs align-items-center mg-b-20">
                             <div class="col-md-12">
-                                <label class="form-label mg-b-0">Suara PKB</label>
-                            </div>
-                            <div class="col-md-12 mg-t-5">
-                                <input class="form-control" name="suara_pkb" placeholder="Masukan Jumlah Suara PKB" type="number" required>
-                            </div>
-                        </div>
-                        <div class="row row-xs align-items-center mg-b-20">
-                            <div class="col-md-12">
                                 <label class="form-label mg-b-0">Perolehan Suara Kang Ibas</label>
                             </div>
                             <div class="col-md-12 mg-t-5">

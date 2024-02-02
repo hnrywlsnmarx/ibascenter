@@ -10,26 +10,31 @@
 							@if(Session::get('role')=='administrator')
 							<li><a href="#" class="sub-icon"><div class="side-angle1"></div><div class="side-angle2"></div><div class="side-arrow"></div><svg class="hor__icon" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"><g><rect height="14" opacity=".3" width="14" x="5" y="5"/><g><rect fill="none" height="24" width="24"/><g><path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,19H5V5h14V19z"/><rect height="5" width="2" x="7" y="12"/><rect height="10" width="2" x="15" y="7"/><rect height="3" width="2" x="11" y="14"/><rect height="2" width="2" x="11" y="10"/></g></g></g></svg> Master<i class="fe fe-chevron-down horizontal-icon"></i></a>
 								<ul class="sub-menu">
-									{{-- <li><a href="{{url('dpt')}}" class="slide-item">DPT</a></li> --}}
+									<li><a href="{{url('dpt')}}" class="slide-item">DPT</a></li>
 									<li><a href="{{url('ibas')}}" class="slide-item">Pemilih Kang Ibas</a></li>
 									<li><a href="{{url('users')}}" class="slide-item">User Aplikasi</a></li>
-									<li><a href="#" class="slide-item">Rekapitulasi Perhitungan Suara</a>
+									<li><a href="{{url('quick')}}" class="slide-item">Quick Count</a></li>
+									<li><a href="{{url('balancing-kalijaga')}}" class="slide-item">Data Balancing Kalijaga</a></li>
+									<li><a href="{{url('balancing-argasunya')}}" class="slide-item">Data Balancing Argasunya</a></li>
+									{{-- <li><a href="#" class="slide-item">Rekapitulasi Perhitungan Suara</a>
 										<ul class="sub-menu">
 											<li><a href="{{url('quick')}}" class="slide-item">Quick Count</a></li>
-											{{-- <li><a href="{{url('real')}}" class="slide-item">Real Count</a></li> --}}
+											
 										</ul>
-									</li>
+									</li> --}}
 								</ul>
 							</li>
 							@else
 							<li><a href="#" class="sub-icon"><div class="side-angle1"></div><div class="side-angle2"></div><div class="side-arrow"></div><svg class="hor__icon" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"><g><rect height="14" opacity=".3" width="14" x="5" y="5"/><g><rect fill="none" height="24" width="24"/><g><path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,19H5V5h14V19z"/><rect height="5" width="2" x="7" y="12"/><rect height="10" width="2" x="15" y="7"/><rect height="3" width="2" x="11" y="14"/><rect height="2" width="2" x="11" y="10"/></g></g></g></svg> Master<i class="fe fe-chevron-down horizontal-icon"></i></a>
 								<ul class="sub-menu">
+									<li><a href="{{url('dpt')}}" class="slide-item">DPT</a></li>
 									<li><a href="{{url('ibas')}}" class="slide-item">Pemilih Kang Ibas</a></li>
 									<li><a href="#" class="slide-item">Rekapitulasi Perhitungan Suara</a>
-										<ul class="sub-menu">
+									<li><a href="{{url('quick')}}" class="slide-item">Quick Count</a></li>
+										{{-- <ul class="sub-menu">
 											<li><a href="{{url('quick')}}" class="slide-item">Quick Count</a></li>
-											{{-- <li><a href="{{url('real')}}" class="slide-item">Real Count</a></li> --}}
-										</ul>
+											
+										</ul> --}}
 									</li>
 								</ul>
 							</li>
