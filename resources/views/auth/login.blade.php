@@ -15,7 +15,7 @@
         @endif
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header" style="background-color: rgb(169, 220, 199); color: rgb(0, 0, 0);"><center><b>Login wong login</b></center></div>
+                <div class="card-header" style="background-color: rgb(169, 220, 199); color: rgb(0, 0, 0);"><center><b>woy Login wong login</b></center></div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
