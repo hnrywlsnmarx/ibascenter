@@ -49,7 +49,9 @@ class DataBalancingController extends Controller
         $users = DataSubmitted::join('sourcekpu as s', function ($join) {
             $join->on('datasubmitted.nama', '=', 's.nama')
                 ->whereRaw('datasubmitted.rt = SUBSTR(s.rt, 2, 3)')
-                ->whereRaw('datasubmitted.rw = SUBSTR(s.rw, 2, 3)');
+                ->whereRaw('datasubmitted.rw = SUBSTR(s.rw, 2, 3)')
+                ->whereRaw('datasubmitted.tps = s.tps')
+                ;
         })
             ->where('datasubmitted.idarea', '=', 1)
             ->where('s.desa', '=', 'KALIJAGA')
@@ -66,7 +68,9 @@ class DataBalancingController extends Controller
             ->join('sourcekpu as s', function ($join) {
                 $join->on('datasubmitted.nama', '=', 's.nama')
                     ->whereRaw('datasubmitted.rt = SUBSTR(s.rt, 2, 3)')
-                    ->whereRaw('datasubmitted.rw = SUBSTR(s.rw, 2, 3)');
+                    ->whereRaw('datasubmitted.rw = SUBSTR(s.rw, 2, 3)')
+                    ->whereRaw('datasubmitted.tps = s.tps')
+                    ;
             })
             ->where('datasubmitted.idarea', 1)
             ->where('s.desa', 'KALIJAGA')
